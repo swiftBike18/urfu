@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp13
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var program =Console.ReadLine();
+            Console.WriteLine(Math.Round(Compute(program),3));
+        }
+
+        static double Compute(string str)
+        {
+            var stack = new Stack<double>();
+            foreach (var e in str)
+            {
+                if (e <= '9' && e >= '0')
+                {
+                    stack.Push(e - '0');
+                    continue;
+                }
+                switch (e)
+                {
+                    case '+':
+                        stack.Push(stack.Pop() + stack.Pop());
+                        break;
+                    case '-':
+                        stack.Push(-stack.Pop() + stack.Pop());
+                        break;
+                    case '*':
+                        stack.Push(stack.Pop() * stack.Pop());
+                        break;
+                    case '/':
+                        stack.Push((1 / stack.Pop()) * stack.Pop());
+                        break;
+                    case '!':
+                        var value = stack.Pop();
+                        var factorial = 1;
+                            for (var i = 1; i <= value; i++)
+                                factorial *= i;
+                            stack.Push(factorial);
+                        break;
+                    case '#': //корень из числа
+                        stack.Push(Math.Sqrt(stack.Pop()));
+                        break;
+                    //case '^': // возведение во вторую степень
+                    //    stack.Push(Math.Pow((stack.Pop()),2));
+                    //    break;
+
+                    case '^': // возведение в степень заданную степень, напрмиер 23^=3 во второй степени
+                        stack.Push(Math.Pow((stack.Pop()),stack.Pop()));
+                        break;
+                    default:
+                        throw new ArgumentException();
+                }
+            }
+            return stack.Pop();
+        }
+    }
+}
